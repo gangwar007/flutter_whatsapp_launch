@@ -30,15 +30,26 @@ public class FlutterWhatsappLaunchPlugin: NSObject, FlutterPlugin {
        let name = args["name"]
 
         switch name ?? "0" {
-           case "whatsapp":
-             result(schemeAvailable(scheme: "whatsapp://send"))
-             break
-           default:
-             result(false)
-             break
+        case "whatsapp":
+          result(schemeAvailable(scheme: "whatsapp://send"))
+          break
+        default:
+          result(false)
+          break
         }
     default:
       result(FlutterMethodNotImplemented)
     }
   }
+
+  public func schemeAvailable(scheme: String) -> Bool {
+      let urlStringEncoded = scheme.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+      let URL = NSURL(string: urlStringEncoded!)
+
+      if UIApplication.shared.canOpenURL(URL! as URL) {
+        return true
+      }
+
+      return false
+    }
 }
